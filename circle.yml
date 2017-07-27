@@ -26,14 +26,15 @@ deployment:
   dev:
     branch: master
     commands:
-      - make ARGS="--rm=false" build-prod-image
+      #- make ARGS="--rm=false" build-prod-image
 
       # push docker image to private docker registry on AWS ECR
       # overwriting CIRCLE_SHA1 is unfortunately necessary because the automatic version bump also bumps the latest git sha
       # which can lead to deployments trying to deploy an image that doesn't exist
-      - export CIRCLE_SHA1=$(git rev-parse --verify master); ./deployment/push-docker-image-to-aws-ecr.sh
+      #- export CIRCLE_SHA1=$(git rev-parse --verify master); ./deployment/push-docker-image-to-aws-ecr.sh
 
       # update kubernetes deployment with new image
       # overwriting CIRCLE_SHA1 is unfortunately necessary because the automatic version bump also bumps the latest git sha
       # which can lead to deployments trying to deploy an image that doesn't exist
-      - export CIRCLE_SHA1=$(git rev-parse --verify master); ./deployment/deploy.sh dev
+      #- export CIRCLE_SHA1=$(git rev-parse --verify master); ./deployment/deploy.sh dev
+      echo "Hola mundo"
