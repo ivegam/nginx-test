@@ -28,6 +28,8 @@ deployment:
     commands:
       #- make ARGS="--rm=false" build-prod-image
       - docker build -t ${KUBERNETES_SERVICE_NAME} -f Dockerfile --rm=false .
+      - echo "aws configure set default.region eu-central-1"
+      - aws configure set default.region us-west-2
 
       # push docker image to private docker registry on AWS ECR
       # overwriting CIRCLE_SHA1 is unfortunately necessary because the automatic version bump also bumps the latest git sha
