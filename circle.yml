@@ -27,7 +27,7 @@ deployment:
     branch: master
     commands:
       #- make ARGS="--rm=false" build-prod-image
-      #- docker build -t ${KUBERNETES_SERVICE_NAME} -f Dockerfile --rm=false .
+      - docker build -t ${KUBERNETES_SERVICE_NAME} -f Dockerfile --rm=false .
 
       # push docker image to private docker registry on AWS ECR
       # overwriting CIRCLE_SHA1 is unfortunately necessary because the automatic version bump also bumps the latest git sha
