@@ -1,0 +1,39 @@
+# IMPORTANT PREREQUISITES
+#
+# • "CircleCI" user needs to be created on AWS with the following policies attached:
+#   - AmazonEC2ContainerRegistryPowerUser
+#   - AmazonS3ReadOnlyAccess
+#
+# • Following environment variables need to be set on CircleCI
+#   - DOCKER_REGISTRY_URL
+#   - KUBERNETES_CONFIG_PASSWORD_DEV
+#   - KUBERNETES_CONFIG_PASSWORD_CANARY
+#   - KUBERNETES_CONFIG_PASSWORD_PROD
+#   - AWS_ACCESS_KEY_ID
+#   - AWS_SECRET_ACCESS_KEY
+#
+# • Kubernetes cluster needs to have been created
+# • ~/.kube/config needs to have been put into a S3 bucket (KUBERNETES_CONFIG_STORE)
+
+machine:
+  services:
+    - docker
+
+  environment:
+    KUBERNETES_SERVICE_NAME: lumiere-frontend
+
+deployment:
+  dev:
+    branch: master
+    commands:
+      - make ARGS="--rm=false" build-prod-image
+
+      # push docker image to private docker registry on AWS ECR
+      # overwriting CIRCLE_SHA1 is unfortunately necessary because the automatic version bump also bumps the latest git sha
+      # which can lead to deployments trying to deploy an image that doesn't exist
+      - export CIRCLE_SHA1=$(git rev-parse --verify master); ./deployment/push-docker-image-to-aws-ecr.sh
+
+      # update kubernetes deployment with new image
+      # overwriting CIRCLE_SHA1 is unfortunately necessary because the automatic version bump also bumps the latest git sha
+      # which can lead to deployments trying to deploy an image that doesn't exist
+      - export CIRCLE_SHA1=$(git rev-parse --verify master); ./deployment/deploy.sh dev
