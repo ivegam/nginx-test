@@ -64,9 +64,10 @@ deployment:
       - echo "docker push $DOCKER_REGISTRY_URL/$KUBERNETES_SERVICE_NAME:latest"
       - docker push $DOCKER_REGISTRY_URL/$KUBERNETES_SERVICE_NAME:latest
       - cp kubernetes.config ~/.kube/config
-      - TOTALPODS=`~/.kube/kubectl get pods | wc -l`
-      - RUNNINGPODS=`~/.kube/kubectl get pods | grep Running | wc -l`
-      - echo "Check #${COUNTER}: ${TOTALPODS} Total Pods — ${RUNNINGPODS} Running Pods"
+      - kubectl get services
+      #- TOTALPODS=`~/.kube/kubectl get pods | wc -l`
+      #- RUNNINGPODS=`~/.kube/kubectl get pods | grep Running | wc -l`
+      #- echo "Check #${COUNTER}: ${TOTALPODS} Total Pods — ${RUNNINGPODS} Running Pods"
       
       # update kubernetes deployment with new image
       # overwriting CIRCLE_SHA1 is unfortunately necessary because the automatic version bump also bumps the latest git sha
