@@ -5,4 +5,4 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy app bundle to wwwroot
-COPY dist /usr/share/nginx/html
+COPY src /usr/share/nginx/html
