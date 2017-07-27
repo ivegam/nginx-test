@@ -30,7 +30,13 @@ deployment:
       - docker build -t ${KUBERNETES_SERVICE_NAME} -f Dockerfile --rm=false .
       - echo "aws configure set default.region eu-central-1"
       - aws configure set default.region us-west-2
+      # set default output to JSON
+      - echo "aws configure set default.output json"
+      - aws configure set default.output json
 
+      # log in to private docker registry on AWS ECR
+      - echo "aws ecr get-login --region eu-central-1"
+      - eval $(aws ecr get-login --region eu-central-1)
       # push docker image to private docker registry on AWS ECR
       # overwriting CIRCLE_SHA1 is unfortunately necessary because the automatic version bump also bumps the latest git sha
       # which can lead to deployments trying to deploy an image that doesn't exist
